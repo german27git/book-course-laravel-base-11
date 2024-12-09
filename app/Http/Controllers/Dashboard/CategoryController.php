@@ -21,13 +21,14 @@ class CategoryController extends Controller
     {
         $category = new Category();
         return view('dashboard.category.create', compact('category'));
+        
     }
 
 
     public function store(StoreRequest $request)
     {
         Category::create($request->validated());
-        return to_route('category.index');
+        return to_route('category.index')->with('status', "registro creado");
 
     }
 
@@ -47,12 +48,12 @@ class CategoryController extends Controller
     public function update(PutRequest $request, Category $category)
     {
         $category->update($request->validated());
-        return to_route('category.index');
+        return to_route('category.index')->with('status', "Category update");
     }
 
     public function destroy(Category $category)
     {
         $category->delete();
-        return to_route('category.index');
+        return to_route('category.index')->with('status', "Category delete");
     }
 }

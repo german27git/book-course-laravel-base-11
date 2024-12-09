@@ -2,6 +2,7 @@
 
 @section('content')
 
+
     <a href="{{ route('category.create') }}">Create</a>
     <table>
         <thead>

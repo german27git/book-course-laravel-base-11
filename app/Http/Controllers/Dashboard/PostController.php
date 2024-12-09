@@ -20,9 +20,9 @@ class PostController extends Controller
 
 
     //  Find es igual a SELECT * FROM POST WHERE ID = 1 
-
+    session()->flush();
+    //session(['key' => 'value']);
     $posts = Post::paginate(2);
-    //dd($posts);
     return view('dashboard/post/index',compact('posts'));
     
     
@@ -72,7 +72,7 @@ class PostController extends Controller
     public function store(StoreRequest $request)
     {
         Post::create($request->validated());
-        return to_route('post.index');
+        return to_route('post.index')->with('status', "Post created");
         
         // $request->validate([
         //     'title' => 'required|min:5|max:500',
@@ -135,7 +135,7 @@ class PostController extends Controller
         }
         //image
         $post->update($data);
-        return to_route('post.index');
+        return to_route('post.index')->with('status', "Post updated");
 
         
 
@@ -147,6 +147,6 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $post->delete();
-        return to_route('post.index');
+        return to_route('post.index')->with('status', "Post delete");
     }
 }
