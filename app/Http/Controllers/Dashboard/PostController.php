@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Post\PuthRequest;
+use App\Http\Requests\Post\PutRequest;
+use App\Http\Requests\Post\StoreRequest;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -18,13 +21,12 @@ class PostController extends Controller
 
     //  Find es igual a SELECT * FROM POST WHERE ID = 1 
 
-    $post = Post::find(1);
-    $category = Category::find(1);
-    //$post = Post::find(4)->delete();
-    dd($category->posts[1]->title);
+    $posts = Post::paginate(2);
+    //dd($posts);
+    return view('dashboard/post/index',compact('posts'));
     
-
-
+    
+    //$post = Post::find(4)->delete();
     // $post->update(
     //             [
     //                 'title' => 'new tittle',
@@ -34,20 +36,20 @@ class PostController extends Controller
     //             ]
     //             );
 
-    // Post::create(
-    //     [
-    //         'title' => 'test tittle',
-    //         'slug' => 'test tittle',
-    //         'content' => 'test tittle',
-    //         'category_id' => 1,
-    //         'description' => 'test tittle',
-    //         'posted' => 'not',
-    //         'image' => 'test image',
-    //     ]
-    //     );
+//    Post::create(
+//        [
+//            'title' => $request->all()['title'],
+//            'slug' => $request->all()['slug' ],
+//            'content' => $request->all()['content'],
+//            'category_id' => $request->all()['categogory_id'],
+//            'description' => $request->all()['description'],
+//            'posted' => $request->all()['posted'],
+//            //'image' => $request->all()['image'],
+//        ]
+//        );
 
 
-        return "Index";
+
     }
 
 
@@ -57,15 +59,47 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::pluck('id', 'title');
+        $post = new Post();
+        
+
+        return view('dashboard.post.create', compact('categories','post'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
-        //
+        Post::create($request->validated());
+        return to_route('post.index');
+        
+        // $request->validate([
+        //     'title' => 'required|min:5|max:500',
+        //     'slug' => 'required|min:5|max:500',
+        //     'content' => 'required|min:7',
+        //     'category_id' => 'required|integer',
+        //     'posted' => 'required',
+        // ]);
+
+
+        //-------FORMA ABREVIADA PARA CREAR POST----//
+        //Post::create($request->all());
+
+
+        //-----Forma tradicional para crear el POST----//
+    //    Post::create(
+    //        [
+    //            'title' => $request->all()['title'],
+    //            'slug' => $request->all()['slug' ],
+    //            'content' => $request->all()['content'],
+    //            'category_id' => $request->all()['category_id'],
+    //            'description' => $request->all()['description'],
+    //            'posted' => $request->all()['posted'],
+    //            //'image' => $request->all()['image'],
+    //        ]
+    //    );
+
     }
 
     /**
@@ -73,7 +107,8 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        
+        return view ('dashboard/post/show',['post'=> $post]);
     }
 
     /**
@@ -81,15 +116,29 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        $categories= Category::pluck('id','title');
+        return view('dashboard.post.edit',compact('categories','post'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Post $post)
+    public function update(PutRequest $request, Post $post)
     {
-        //
+        
+        $data= $request->validated();
+        
+        //image
+        if(isset($data['image'])){
+            $data['image'] = $filename = time().'.'.$data['image']->extension();
+            $request->image->move(public_path('uploads/posts'),$filename);
+        }
+        //image
+        $post->update($data);
+        return to_route('post.index');
+
+        
+
     }
 
     /**
@@ -97,6 +146,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return to_route('post.index');
     }
 }
