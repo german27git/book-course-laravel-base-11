@@ -2,29 +2,29 @@
 
 @section('content')
 
-    <a href="{{ route('post.create') }}">Create</a>
-    <table>
+    <a class="btn btn-primary my-3" href="{{ route('post.create') }}">Create</a>
+    <table class="table">
         <thead>
             <tr>
-                <td>
+                <th>
                     Id
-                </td>
+                </th>
 
-                <td>
+                <th>
                     Title
-                </td>
+                </th>
 
-                <td>
+                <th>
                     Posted
-                </td>
+                </th>
 
-                <td>
+                <th>
                     Category
-                </td>
+                </th>
 
-                <td>
+                <th>
                     Options
-                </td>
+                </th>
             </tr>
 
         </thead>
@@ -44,17 +44,18 @@
                         {{$p->category->title}}
                     </td>
                     <td>
-                        <a href="{{ route('post.edit',$p) }}">Edit</a>
-                        <a href="{{ route('post.show',$p) }}">Show</a>
+                        <a class="btn btn-success mt-2" href="{{ route('post.edit',$p) }}">Edit</a>
+                        <a class="btn btn-success mt-2" href="{{ route('post.show',$p) }}">Show</a>
                         <form action="{{ route('post.destroy', $p) }}" method="post">
                             @method('DELETE')
                             @csrf
-                            <button type="submit">Delete</button>
+                            <button class="btn btn-danger mt-2" type="submit">Delete</button>
                     </form>
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
+    <div class="mt-2"></div>
     {{$posts->links()}}
 @endsection

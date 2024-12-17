@@ -20,8 +20,8 @@ class PostController extends Controller
 
 
     //  Find es igual a SELECT * FROM POST WHERE ID = 1 
-    session()->flush();
-    //session(['key' => 'value']);
+    //session()->flush();   //--->eliminar session
+    //session(['key' => 'value']);  //---->Mensaje session
     $posts = Post::paginate(2);
     return view('dashboard/post/index',compact('posts'));
     
