@@ -9,7 +9,6 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
     /**
@@ -21,6 +20,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'rol'
     ];
 
     /**
@@ -33,8 +33,7 @@ class User extends Authenticatable
         'remember_token',
     ];
 
-    public function isAdmin():bool {
-        
+    public function isAdmin(): bool{
         return $this->rol == 'admin';
     }
 

@@ -19,29 +19,32 @@
             @include('layouts.navigation')
 
             <!-- Page Heading -->
-            @isset($header)
+            @if (isset($header))
                 <header class="bg-white dark:bg-gray-800 shadow">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
                 </header>
-            @endisset
+            @endif
 
             <!-- Page Content -->
             <main>
-
+             
+        
                 <div class="container mx-auto">
-
-                    @if (@session('status'))
+                    
+                    @if (session('status'))
                         <div class="card card-success my-3">
-                            {{session('status')}}
-                            @endif
-                        
+                            {{ session('status') }}
+                        </div>
+                    @endif
 
-                    <div class="card card-white mt-8">
+                   <div class="card card-white mt-8">
+
+                    <h1>Dashboard</h1>
+
                         @yield('content')
-                    </div>
-                    </div>
+                   </div>
                 </div>
             </main>
         </div>

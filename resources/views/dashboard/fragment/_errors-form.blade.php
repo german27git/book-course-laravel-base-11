@@ -1,7 +1,7 @@
 @if ($errors->any())
 @foreach ($errors->all() as $e)
     <div>
-        {{$e}}
+        {{ $e }}
     </div>
 @endforeach
 @endif

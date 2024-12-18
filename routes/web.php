@@ -1,12 +1,10 @@
 <?php
 
+use App\Http\Controllers\blog\BlogController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Dashboard\CategoryController;
-use App\Http\Controllers\Dashboard\PostController;
-use App\Models\Category;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
-use App\Http\Middleware\UserAccesDashboardMiddleware;
+
+use App\Http\Middleware\UserAccessDashboardMiddleware;
 
 Route::get('/', function () {
     return view('welcome');
@@ -22,14 +20,20 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::prefix('dashboard')->middleware(['auth', UserAccesDashboardMiddleware::class])->group(function(){
-    Route::resource('post',PostController::class);
-    Route::resource('category',CategoryController::class);
-
+Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', UserAccessDashboardMiddleware::class]], function () {
+    Route::resources([
+        'post' => App\Http\Controllers\Dashboard\PostController::class,
+        'category' => App\Http\Controllers\Dashboard\CategoryController::class,
+    ]);
     Route::get('', function () {
         return view('dashboard');
     })->middleware(['auth'])->name('dashboard');
-
+});
+Route::group(['prefix' => 'blog'], function () {
+    Route::get('', [BlogController::class, 'index'])->name('blog.index');
+    Route::get('detail/{post}', [BlogController::class, 'show'])->name('blog.show');
 });
 
-require __DIR__.'/auth.php';
+
+
+require __DIR__ . '/auth.php';
