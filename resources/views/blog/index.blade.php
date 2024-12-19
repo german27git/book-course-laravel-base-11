@@ -2,13 +2,13 @@
 
 @section('content')
     <x-blog.post.index :posts='$posts'>
-        Post List
+        Post list
 
         @slot('footer')
-            Footer
+            footer
         @endslot
 
-        @slot('extra', 'Extra')
-
-    </x-blog.post.index>
+        
+    </x-blog.post.index>    
 @endsection
+    
