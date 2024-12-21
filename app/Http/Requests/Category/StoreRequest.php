@@ -16,7 +16,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'title' => 'required|min:5|max:500',
-            'slug' => 'required|min:3|max:500|unique:posts',
+            'slug' => "required|min:3|max:500|unique:categories",
         ];
     }
 }
